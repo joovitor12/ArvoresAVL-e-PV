@@ -50,13 +50,13 @@ public class ArvoreAVL {
         no.setBalanceamento(alturaNo(no.getDireita()) - alturaNo(no.getEsquerda()));
         int balanceamento = no.getBalanceamento();
 
-        if (balanceamento == -2 || balanceamento < -2) {
+        if (balanceamento == -2) {
             if (alturaNo(no.getEsquerda().getEsquerda()) >= alturaNo(no.getEsquerda().getDireita())) {
                 no = rotacaoDireita(no);
             } else {
                 no = rotacaoDuplaEsqDir(no);
             }
-        } else if (balanceamento == 2 || balanceamento > 2) {
+        } else if (balanceamento == 2) {
             if (alturaNo(no.getDireita().getDireita()) >= alturaNo(no.getDireita().getEsquerda())) {
                 no = rotacaoEsquerda(no);
             } else {
@@ -66,7 +66,7 @@ public class ArvoreAVL {
         if (no.getPai() != null) {
             balancear(no.getPai());
         } else {
-            raiz = no;
+            this.raiz = no;
         }
     }
 

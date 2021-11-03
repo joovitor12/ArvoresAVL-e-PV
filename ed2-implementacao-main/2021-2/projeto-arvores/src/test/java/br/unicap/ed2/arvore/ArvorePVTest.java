@@ -23,9 +23,9 @@ public class ArvorePVTest {
         NoPV auxDir = aux.getDireita();
         NoPV auxEsq = aux.getEsquerda();
         assertTrue( auxEsq != null );
-        assertTrue( auxEsq.getChave() == 18 );
+        assertTrue( auxEsq.getChave() == 15 );
         assertTrue( auxDir != null );
-        assertTrue( auxDir.getChave() == 15 );
+        assertTrue( auxDir.getChave() == 18 );
         assertTrue( a.ehRaiz(8) );
 
     }
@@ -46,9 +46,9 @@ public class ArvorePVTest {
         NoPV auxDir = aux.getDireita();
         NoPV auxEsq = aux.getEsquerda();
         assertTrue( auxEsq != null );
-        assertTrue( auxEsq.getChave() == 40 );
+        assertTrue( auxEsq.getChave() == 18 );
         assertTrue( auxDir != null );
-        assertTrue( auxDir.getChave() == 18 );
+        assertTrue( auxDir.getChave() == 40 );
         assertTrue( a.ehRaiz(8) );
 
     }
