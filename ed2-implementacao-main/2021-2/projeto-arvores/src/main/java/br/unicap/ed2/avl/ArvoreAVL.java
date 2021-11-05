@@ -10,7 +10,7 @@ public class ArvoreAVL {
 
     public void inserir(int noAVL) {
         NoAVL n = new NoAVL(noAVL);
-        inserirNoAVL(this.raiz, n);
+        inserirNoAVL(raiz, n);
     }
 
     public boolean ehRaiz(int i) {
@@ -19,7 +19,7 @@ public class ArvoreAVL {
         }
         return raiz.getChave() == i;
     }
-
+                            //no comparador e no a ser inserido, respectivamente
     public void inserirNoAVL(NoAVL a, NoAVL b) {
         if (a == null) {
             raiz = b;
@@ -41,22 +41,20 @@ public class ArvoreAVL {
                     inserirNoAVL(a.getDireita(), b);
                 }
             } else {
-                System.out.println("No existente!");
+                System.out.println("Node existente!");
             }
         }
     }
 
     public void balancear(NoAVL no) {
-        no.setBalanceamento(alturaNo(no.getDireita()) - alturaNo(no.getEsquerda()));
-        int balanceamento = no.getBalanceamento();
-
-        if (balanceamento == -2) {
+        no.setBalanceamento(alturaNo(no.getDireita()) - alturaNo(no.getEsquerda()));              
+        if (no.getBalanceamento() == -2 || no.getBalanceamento() < -2) {
             if (alturaNo(no.getEsquerda().getEsquerda()) >= alturaNo(no.getEsquerda().getDireita())) {
                 no = rotacaoDireita(no);
             } else {
                 no = rotacaoDuplaEsqDir(no);
             }
-        } else if (balanceamento == 2) {
+        } else if (no.getBalanceamento() == 2 || no.getBalanceamento() > 2) {
             if (alturaNo(no.getDireita().getDireita()) >= alturaNo(no.getDireita().getEsquerda())) {
                 no = rotacaoEsquerda(no);
             } else {
@@ -66,7 +64,7 @@ public class ArvoreAVL {
         if (no.getPai() != null) {
             balancear(no.getPai());
         } else {
-            this.raiz = no;
+            raiz = no;
         }
     }
 
@@ -76,15 +74,18 @@ public class ArvoreAVL {
 
     protected NoAVL procurarComBusca(NoAVL p, int el) {
         while (p != null) {
-            /* se valor procurad == chave do nó retorna referência ao nó */
+            // se valor procurado == chave(inteiro) 
+            //retorna o no procurado
             if (el == p.getChave()) {
                 return p;
             }
-            /* se valor procurado < chave do nó, procurar na sub-árvore esquerda deste nó */
+            // se valor procurado < chave(inteiro) 
+            //o no procurado recebe seu no a esquerda
             else if (el < p.getChave()) {
                 p = p.getEsquerda();
             }
-            /* se valor procurado > chave do nó, procurar na sub-árvore direita deste nó */
+            // se valor procurado > chave(inteiro) 
+            //o no procurado recebe seu no a direita
             else {
                 p = p.getDireita();
             }
@@ -104,46 +105,39 @@ public class ArvoreAVL {
             } else if (no.getChave() < i) {
                 deletarAVL(no.getDireita(), i);
             } else if (no.getChave() == i) {
-                deletarBusca(no);
+                if (no.getEsquerda() == null || no.getDireita() == null) {
+                    if (no.getPai() == null) {
+                        raiz = null;
+                        no = null;
+                        return;
+                    }
+                } else {
+                    no = sucessor(no);
+                    no.setChave(no.getChave());
+                }
+                NoAVL aux;
+                if (no.getEsquerda() != null) {
+                    aux = no.getEsquerda();
+                } else {
+                    aux = no.getDireita();
+                }
+                if (aux != null) {
+                    aux.setPai(no.getPai());
+                }
+        
+                if (no.getPai() == null) {
+                    raiz = aux;
+                } else {
+                    if (no == no.getPai().getEsquerda()) {
+                        no.getPai().setEsquerda(aux);
+                    } else {
+                        no.getPai().setDireita(aux);
+                    }
+                    balancear(no.getPai());
+                }
             }
         } else {
             return;
-        }
-    }
-
-    public void deletarBusca(NoAVL remove) {
-        NoAVL no;
-
-        if (remove.getEsquerda() == null || remove.getDireita() == null) {
-            if (remove.getPai() == null) {
-                raiz = null;
-                remove = null;
-                return;
-            }
-            no = remove;
-        } else {
-            no = sucessor(remove);
-            remove.setChave(no.getChave());
-        }
-        NoAVL aux;
-        if (no.getEsquerda() != null) {
-            aux = no.getEsquerda();
-        } else {
-            aux = no.getDireita();
-        }
-        if (aux != null) {
-            aux.setPai(no.getPai());
-        }
-
-        if (no.getPai() == null) {
-            raiz = aux;
-        } else {
-            if (no == no.getPai().getEsquerda()) {
-                no.getPai().setEsquerda(aux);
-            } else {
-                no.getPai().setDireita(aux);
-            }
-            balancear(no.getPai());
         }
     }
 
@@ -204,8 +198,8 @@ public class ArvoreAVL {
             }
         }
 
-        setBalanceamento(noInicial);
-        setBalanceamento(dir);
+        noInicial.setBalanceamento(alturaNo(noInicial.getDireita()) - alturaNo(noInicial.getEsquerda()));
+        dir.setBalanceamento(alturaNo(dir.getDireita()) - alturaNo(dir.getEsquerda()));
 
         return dir;
     }
@@ -233,8 +227,10 @@ public class ArvoreAVL {
             }
         }
 
-        setBalanceamento(noInicial);
-        setBalanceamento(esq);
+        //setBalanceamento(noInicial);
+        noInicial.setBalanceamento(alturaNo(noInicial.getDireita()) - alturaNo(noInicial.getEsquerda()));
+        esq.setBalanceamento(alturaNo(esq.getDireita()) - alturaNo(esq.getEsquerda()));
+        //setBalanceamento(esq);
 
         return esq;
     }
@@ -249,8 +245,7 @@ public class ArvoreAVL {
         return rotacaoEsquerda(noInicial);
     }
 
-    private void setBalanceamento(NoAVL no) {
-        no.setBalanceamento(alturaNo(no.getDireita()) - alturaNo(no.getEsquerda()));
-    }
+
+    
 
 }
